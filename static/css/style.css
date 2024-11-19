@@ -1,0 +1,187 @@
+/* Estilo general */
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #0a192f;
+    color: #64ffda;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Contenedor principal */
+.calculator-container {
+    background-color: #112240;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #64ffda;
+    box-shadow: 0px 0px 20px rgba(100, 255, 218, 0.2);
+}
+
+/* Pantalla de la calculadora */
+.calculator-screen {
+    background-color: #0a192f;
+    color: #64ffda;
+    font-size: 1.5rem;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 15px;
+    text-align: right;
+    width: 100%;
+    box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.3);
+    border: none;
+    border: 1px solid #64ffda;
+    box-shadow: inset 0px 0px 10px rgba(100, 255, 218, 0.2);
+    font-family: 'Courier New', monospace;
+}
+
+/* Botonera */
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+/* Botones */
+button {
+    background-color: #112240;
+    color: #64ffda;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    border: 1px solid #64ffda;
+    box-shadow: 0px 0px 10px rgba(100, 255, 218, 0.1);
+    font-family: 'Courier New', monospace;
+}
+
+button:hover {
+    background-color: #233554;
+    box-shadow: 0px 0px 15px rgba(100, 255, 218, 0.3);
+}
+
+/* Botones de acción */
+button.operator {
+    background-color: #233554;
+    color: #64ffda;
+    border-color: #64ffda;
+}
+
+button.operator:hover {
+    background-color: #34517b;
+}
+
+button.clear {
+    background-color: #ff5555;
+    color: #0a192f;
+    border-color: #ff5555;
+}
+
+button.clear:hover {
+    background-color: #d94343;
+}
+
+button.equal {
+    background-color: #64ffda;
+    color: #0a192f;
+    border-color: #64ffda;
+    grid-column: span 2;
+}
+
+button.equal:hover {
+    background-color: #e09418;
+}
+
+/* Botón para mostrar el árbol */
+button.tree {
+    background-color: #233554;
+    color: #64ffda;
+    border-color: #64ffda;
+    grid-column: span 2;
+}
+
+button.tree:hover {
+    background-color: #45a043;
+}
+
+/* Contenedor del árbol */
+#tree {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #112240;
+    border-radius: 10px;
+    border: 1px solid #64ffda;
+    box-shadow: 0px 0px 15px rgba(100, 255, 218, 0.1);
+}
+
+.tree-node {
+    padding: 15px;
+    margin: 15px;
+    border: 2px solid #64ffda;
+    border-radius: 50%;
+    background-color: #112240;
+    color: #64ffda;
+    min-width: 40px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0px 0px 10px rgba(100, 255, 218, 0.2);
+}
+
+.tree-children {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    position: relative;
+}
+
+.tree-node::before,
+.tree-node::after {
+    content: '';
+    position: absolute;
+    background-color: #64ffda;
+    width: 2px;
+}
+
+.tree-node::before {
+    bottom: 100%;
+    left: 50%;
+    height: 20px;
+    transform: translateX(-50%);
+}
+
+.tree-children > .tree-node::after {
+    top: 100%;
+    left: 50%;
+    height: 20px;
+    transform: translateX(-50%);
+}
+
+.tree-children::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 25%;
+    right: 25%;
+    height: 2px;
+    background-color: #64ffda;
+}
+
+.tree-node-left::after,
+.tree-node-right::after,
+.tree-children > .tree-node::before {
+    display: none;
+}

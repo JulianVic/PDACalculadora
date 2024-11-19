@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora con Árbol</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="calculator-container">
+        <!-- Pantalla de la calculadora -->
+        <input type="text" class="calculator-screen" id="screen" name="expression" placeholder="Escribe una operación (e.g., 2*5+2)" required readonly>
+
+        <!-- Botonera de la calculadora -->
+        <div class="button-grid">
+            <button onclick="appendToScreen('(')">(</button>
+            <button onclick="appendToScreen(')')">)</button>
+            <button class="clear" onclick="clearScreen()">C</button>
+            <button class="operator" onclick="appendToScreen('/')">/</button>
+            <button onclick="appendToScreen('7')">7</button>
+            <button onclick="appendToScreen('8')">8</button>
+            <button onclick="appendToScreen('9')">9</button>
+            <button class="operator" onclick="appendToScreen('*')">*</button>
+            <button onclick="appendToScreen('4')">4</button>
+            <button onclick="appendToScreen('5')">5</button>
+            <button onclick="appendToScreen('6')">6</button>
+            <button class="operator" onclick="appendToScreen('-')">-</button>
+            <button onclick="appendToScreen('1')">1</button>
+            <button onclick="appendToScreen('2')">2</button>
+            <button onclick="appendToScreen('3')">3</button>
+            <button class="operator" onclick="appendToScreen('+')">+</button>
+            <button onclick="appendToScreen('0')">0</button>
+            <button onclick="appendToScreen('.')">.</button>
+            <button class="equal" onclick="submitExpression()">=</button>
+            <button class="tree" onclick="renderTreeFromServer()">Tree</button>
+        </div>
+
+        <!-- Área para el árbol -->
+        <div id="tree"></div>
+    </div>
+
+    <script>
+        // Función para agregar texto a la pantalla
+        function appendToScreen(value) {
+            const screen = document.getElementById("screen");
+            screen.value += value;
+        }
+
+        // Función para limpiar la pantalla
+        function clearScreen() {
+            document.getElementById("screen").value = "";
+            document.getElementById("tree").innerHTML = "";
+        }
+
+        // Función para enviar la expresión al servidor
+        async function submitExpression() {
+            const screen = document.getElementById("screen");
+            const expression = screen.value;
+
+            if (!expression) {
+                alert("Por favor, introduce una operación.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("expression", expression);
+
+            const response = await fetch("/", {
+                method: "POST",
+                body: formData,
+            });
+
+            const data = await response.json();
+            if (data.error) {
+                alert("Error: " + data.error);
+            } else {
+                screen.value = data.result;
+                console.log("Aquí nomás -->", JSON.stringify(data.tree, null, 2));
+                console.log("Aquí nomás -->", JSON.stringify(data.result, null, 2));
+                renderTree(data.tree);
+            }
+        }
+
+        // Función para renderizar el árbol
+        function renderTree(tree) {
+            const treeContainer = document.getElementById("tree");
+            treeContainer.innerHTML = ""; // Limpiar el contenido previo
+
+            // Función recursiva para crear nodos del árbol
+            function createTreeNode(node) {
+                if (!node) return null;
+
+                const element = document.createElement("div");
+                element.classList.add("tree-node");
+                console.log("El valor es -->" + node.value)
+                element.innerText = node.value; // Mostrar valor del nodo
+
+                // Si el nodo tiene hijos, crear subnodos
+                if (node.left || node.right) {
+                    const childrenContainer = document.createElement("div");
+                    childrenContainer.classList.add("tree-children");
+
+                    if (node.left) childrenContainer.appendChild(createTreeNode(node.left));
+                    if (node.right) childrenContainer.appendChild(createTreeNode(node.right));
+
+                    element.appendChild(childrenContainer);
+                }
+                return element;
+            }
+
+            const treeStructure = createTreeNode(tree);
+            if (treeStructure) {
+                treeContainer.appendChild(treeStructure);
+            } else {
+                treeContainer.innerHTML = "<p>No se pudo generar el árbol.</p>";
+            }
+        }
+
+        // Agregar esta nueva función
+        async function renderTreeFromServer() {
+            const screen = document.getElementById("screen");
+            const expression = screen.value;
+
+            if (!expression) {
+                alert("Por favor, introduce una operación primero.");
+                return;
+            }
+
+            // Reutilizamos la lógica de submitExpression
+            const formData = new FormData();
+            formData.append("expression", expression);
+
+            const response = await fetch("/", {
+                method: "POST",
+                body: formData,
+            });
+
+            const data = await response.json();
+            if (data.error) {
+                alert("Error: " + data.error);
+            } else {
+                renderTree(data.tree);
+            }
+        }
+    </script>
+</body>
+</html>
