@@ -125,63 +125,107 @@ button.tree:hover {
     box-shadow: 0px 0px 15px rgba(100, 255, 218, 0.1);
 }
 
+.tree {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
 .tree-node {
-    padding: 15px;
-    margin: 15px;
-    border: 2px solid #64ffda;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+    margin: 0 40px;
+}
+
+.node-content {
+    width: 40px;
+    height: 40px;
+    background: #4CAF50;
     border-radius: 50%;
-    background-color: #112240;
-    color: #64ffda;
-    min-width: 40px;
-    min-height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
+    font-weight: bold;
     position: relative;
-    box-shadow: 0px 0px 10px rgba(100, 255, 218, 0.2);
+    z-index: 2;
 }
 
 .tree-children {
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
     position: relative;
+    width: 100%;
+    margin-top: 15px;
 }
 
-.tree-node::before,
-.tree-node::after {
-    content: '';
-    position: absolute;
-    background-color: #64ffda;
-    width: 2px;
-}
-
-.tree-node::before {
-    bottom: 100%;
-    left: 50%;
-    height: 20px;
-    transform: translateX(-50%);
-}
-
-.tree-children > .tree-node::after {
-    top: 100%;
-    left: 50%;
-    height: 20px;
-    transform: translateX(-50%);
-}
-
+/* Línea horizontal que atraviesa todo el nivel */
 .tree-children::before {
     content: '';
     position: absolute;
-    top: -20px;
-    left: 25%;
-    right: 25%;
+    top: 0;
+    left: -50px;
+    right: -50px;
     height: 2px;
-    background-color: #64ffda;
+    background: #64ffda;
 }
 
-.tree-node-left::after,
-.tree-node-right::after,
+/* Línea vertical desde el nodo padre */
+.node-content::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 2px;
+    height: 15px;
+    background: #64ffda;
+    transform: translateX(-50%);
+}
+
+/* Líneas verticales a los nodos hijos */
 .tree-children > .tree-node::before {
-    display: none;
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    width: 2px;
+    height: 15px;
+    background: #64ffda;
+    transform: translateX(-50%);
+}
+
+/* Nuevo layout */
+body {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Contenedor de tokens */
+.tokens-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.tokens-list, .tokens-count {
+    background-color: #112240;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #64ffda;
+    color: #64ffda;
+}
+
+/* Botones de memoria */
+button.memory {
+    background-color: #2a4365;
+    color: #64ffda;
+}
+
+button.backspace {
+    background-color: #805ad5;
+    color: #ffffff;
 }
